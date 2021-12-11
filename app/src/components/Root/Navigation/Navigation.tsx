@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
+import { AppointmentDetailsContext } from "../../../Context/AppointmentDetailsContext";
 
 const Wrapper = styled.div`
   background-color: #e7e7e7;
@@ -12,11 +13,20 @@ const Wrapper = styled.div`
 `;
 
 const Navigation = () => {
+  const context = useContext(AppointmentDetailsContext)
+  const { appointmentDetails } = context
+
   return (
     <Wrapper>
-      <strong>
-        Currently selected appointment: [appointment date] with [broker name]
-      </strong>
+      {
+        appointmentDetails !== null ?  
+          <strong>
+          {`Currently selected appointment: ${appointmentDetails?.appointment.date} with ${appointmentDetails?.broker.name}`}
+          </strong> 
+          : 
+          <strong>No selected appointment.</strong>
+      }
+     
       <strong>Welcome to Lendi</strong>
     </Wrapper>
   );

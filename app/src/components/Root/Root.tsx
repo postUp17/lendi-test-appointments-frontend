@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 
 import Navigation from "./Navigation";
 import AppointmentSelect from "./AppointmentSelect";
+import { AppointmentDetailsContext } from "../../Context/AppointmentDetailsContext";
+import { Details } from "./AppointmentSelect/AppointmentSelect";
 
 const Wrapper = styled.div`
   background-color: #fcfcfc;
@@ -27,14 +29,17 @@ const Heading = styled.strong.attrs({ role: "heading", level: 1 })`
 `;
 
 const Root = () => {
+  const [appointmentDetails, setAppointmentDetails] = useState<Details | null>(null)
   return (
-    <Wrapper>
-      <Navigation />
-      <Content>
-        <Heading>Amazing site</Heading>
-        <AppointmentSelect />
-      </Content>
-    </Wrapper>
+    <AppointmentDetailsContext.Provider value={{appointmentDetails, setAppointmentDetails}}>
+      <Wrapper>
+        <Navigation />
+        <Content>
+          <Heading>Amazing site</Heading>
+          <AppointmentSelect />
+        </Content>
+      </Wrapper>
+    </AppointmentDetailsContext.Provider>
   );
 };
 
