@@ -18,10 +18,6 @@ const Heading = styled.strong.attrs({ role: "heading", level: 2 })`
   font-size: 20px;
 `;
 
-const AppointmentDetails = styled.div`
-  margin-top: 10px;
-`;
-
 type BrokerAppointments = {
   id: number;
   name: string;
@@ -46,8 +42,6 @@ export type Details = {
 
 const AppointmentSelect = () => { 
   const [brokers, setBrokers] = useState<BrokerAppointments>([])
-	const [hiddenBrokers, setHiddenBrokers] = useState<number[] >([])
-	// const [appointmentDetails, setAppointmentDetails] = useState<Details | null>(null)
 
 	const context = useContext(AppointmentDetailsContext)
 	const {appointmentDetails, setAppointmentDetails} = context
@@ -58,7 +52,6 @@ const AppointmentSelect = () => {
 			const {data: appointmentsData} : {data: Appointment[] } = await axios.get("http://localhost:8080/appointments")
 
 			const brokersAppointments: BrokerAppointments = []
-
 			brokersData.forEach(bk => {
 			 const appointments: { id: number; brokerId: number; date: string }[] =	appointmentsData.filter(app => bk.id === app.brokerId)
 			 const brokerAppointments = {
@@ -79,16 +72,6 @@ const AppointmentSelect = () => {
 	useEffect(() => {
 		fetchBrokers()
 	}, [])
-
-	const handleShowHide = (brokerId: number) => {
-    const isCurrentlyHidden = hiddenBrokers.includes(brokerId)
-
-    const newHiddenBrokers = isCurrentlyHidden
-      ? hiddenBrokers.filter(id => id !== brokerId)
-      : hiddenBrokers.concat(brokerId)
-
-    setHiddenBrokers(newHiddenBrokers)
-  }
 
 	const showAppointmentDetails = (brokerId: number, appointmentId: number) => {
 		for (const bk of brokers) {
@@ -119,10 +102,7 @@ const AppointmentSelect = () => {
 						<li key={broker.id} >
 							<Broker 
 								broker={broker} 
-								handleShowHide={handleShowHide} 
-								hiddenBrokers={hiddenBrokers}
 								showAppointmentDetails={showAppointmentDetails}
-								appointmentDetails={appointmentDetails}
 							/> 
 						</li>)}
         </ul> : <div>No broker available</div>}
@@ -130,7 +110,7 @@ const AppointmentSelect = () => {
       </SideBar>
       <div>
         <Heading>Appointment details</Heading>
-				<AppointmentDetails>
+				<div style={{marginTop: '10px'}}>
 					{appointmentDetails === null ? 
 						<div>Click on an appointment date to view the details</div> 
 						: 
@@ -139,8 +119,7 @@ const AppointmentSelect = () => {
 							<div>Date: {appointmentDetails?.appointment.date}</div>
 						</>
 					}
-				
-				</AppointmentDetails>
+				</div>
       </div>
     </Wrapper>
   );
