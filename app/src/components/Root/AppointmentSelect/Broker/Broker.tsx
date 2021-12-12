@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { AppointmentDetailsContext } from "../../../../Context/AppointmentDetailsContext";
-import {Details} from '../AppointmentSelect'
 
 const Title = styled.div`
   margin-bottom: 5px;
@@ -18,7 +17,7 @@ export interface BrokerProps {
 }
 
 const Broker = (props: BrokerProps) => {
-  const { broker, showAppointmentDetails, } = props
+  const { broker, showAppointmentDetails } = props
   const context = useContext(AppointmentDetailsContext)
   const { appointmentDetails } = context
   const [isHidden, setIsHidden] = useState(false)
@@ -43,6 +42,7 @@ const Broker = (props: BrokerProps) => {
       {!isHidden && appointments.map(app => 
         <li 
           key={app.id} 
+          data-testid="broker-appointment"
           style={app.id === appointmentDetails?.appointment.id ? {cursor: 'pointer', color: '#41ccb7'} : {cursor: 'pointer'}} 
           onClick={() => showAppointmentDetails(broker.id, app.id)}>
             {app.date}
